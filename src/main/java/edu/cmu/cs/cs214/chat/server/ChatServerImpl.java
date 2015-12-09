@@ -146,6 +146,12 @@ public class ChatServerImpl extends Thread implements ChatServer {
             try {
                 ObjectInputStream in = new ObjectInputStream(
                         socket.getInputStream());
+                // Get worker name
+                // Modified the server to expect a username when the client first 
+                // connects. It passes the user who joined to a (unfinished) 
+                // onJoin callback
+                String username = (String) in.readObject();
+                onJoin(username);
                 while (true) {
                     Message msg = (Message) in.readObject();
                     onNewMessage(socket, msg);
@@ -165,11 +171,36 @@ public class ChatServerImpl extends Thread implements ChatServer {
                 }
             }
         }
+<<<<<<< HEAD
+        
+        private void onJoin(String username) {
+            // TODO: Notify all clients that the given user has connected to the
+            // server. HINT: This will look very similar to onNewMessage but
+            // instead of notifying the clients of the new message, it will
+            // notify them of a joining user.
+        	
+        	// It should be as simple as borrowing the notification code in 
+        	// onNewMessage, but send a different message.
+            synchronized (clients) {
+                for (Socket s : clients) {
+                    try {
+                        ObjectOutputStream out = new ObjectOutputStream(
+                                s.getOutputStream());
+                        out.writeObject("New Client joined server: " + username);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Unable to send message to client.");
+                    }
+                }
+            }
+        }
+        
+=======
 
 
         // TODO: Notify all clients when a new client joins the chat server.
         // This probably is made easy with a call back for when a client joins.
 
+>>>>>>> dda215302860a663b8f3e7cb127a4728a70398a5
         /**
          * Callback for when a message is received by the server. Notifies all
          * clients about the new message received
