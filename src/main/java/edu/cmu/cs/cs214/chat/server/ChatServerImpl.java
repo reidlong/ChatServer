@@ -180,6 +180,17 @@ public class ChatServerImpl extends Thread implements ChatServer {
         	
         	// It should be as simple as borrowing the notification code in 
         	// onNewMessage, but send a different message.
+            synchronized (clients) {
+                for (Socket s : clients) {
+                    try {
+                        ObjectOutputStream out = new ObjectOutputStream(
+                                s.getOutputStream());
+                        out.writeObject("New Client joined server: " + username);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Unable to send message to client.");
+                    }
+                }
+            }
         }
         
         /**
