@@ -5,8 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -167,9 +169,6 @@ public class ChatServerImpl extends Thread implements ChatServer {
         }
 
 
-        // TODO: Notify all clients when a new client joins the chat server.
-        // This probably is made easy with a call back for when a client joins.
-
         /**
          * Callback for when a message is received by the server. Notifies all
          * clients about the new message received
@@ -180,6 +179,12 @@ public class ChatServerImpl extends Thread implements ChatServer {
          *            Message sent by the client
          */
         private void onNewMessage(Socket from, Message msg) {
+        	// TODO: Add the server timestamp to the message received. Note:
+        	// Message#setServerTimestamp was created for you in the Message
+        	// class.
+        	
+        	msg.setServerTimestamp(new Date());
+        	
             // Synchronize because we are iterating through all clients in a
             // thread
             synchronized (clients) {
