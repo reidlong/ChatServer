@@ -171,6 +171,7 @@ public class ChatServerImpl extends Thread implements ChatServer {
                 }
             }
         }
+<<<<<<< HEAD
         
         private void onJoin(String username) {
             // TODO: Notify all clients that the given user has connected to the
@@ -180,8 +181,26 @@ public class ChatServerImpl extends Thread implements ChatServer {
         	
         	// It should be as simple as borrowing the notification code in 
         	// onNewMessage, but send a different message.
+            synchronized (clients) {
+                for (Socket s : clients) {
+                    try {
+                        ObjectOutputStream out = new ObjectOutputStream(
+                                s.getOutputStream());
+                        out.writeObject("New Client joined server: " + username);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Unable to send message to client.");
+                    }
+                }
+            }
         }
         
+=======
+
+
+        // TODO: Notify all clients when a new client joins the chat server.
+        // This probably is made easy with a call back for when a client joins.
+
+>>>>>>> dda215302860a663b8f3e7cb127a4728a70398a5
         /**
          * Callback for when a message is received by the server. Notifies all
          * clients about the new message received
