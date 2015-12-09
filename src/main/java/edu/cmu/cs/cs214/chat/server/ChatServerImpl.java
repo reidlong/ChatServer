@@ -180,6 +180,11 @@ public class ChatServerImpl extends Thread implements ChatServer {
         	
         	// It should be as simple as borrowing the notification code in 
         	// onNewMessage, but send a different message.
+        	Message message = new Message("Joined the Server", username);
+        	onNewMessage(null, message);
+        	
+        	
+        	
         }
         
         /**
